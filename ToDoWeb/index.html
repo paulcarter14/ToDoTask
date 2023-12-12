@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Manage your list of notes about Brad Pitt.">
+  <title>TodoMVC</title>
+  <link rel="stylesheet" href="main.css">
+  <script src="todomvc.js" defer></script>
+</head>
+<body>
+  <template id="todo-item-template">
+    <li class="note-container" data-note-id="">
+      <input type="checkbox" class="note-checkbox">
+      <span class="note-text"></span>
+      <button type="button" class="delete-button">❌</button>
+    </li>
+  </template>
+  <header>
+    <h1>Todos</h1>
+  </header>
+  <main>
+    <form id="add-form" autocomplete="off">
+      <button type="button" id="toggle-all-button">🔽</button>
+      <input type="text" autofocus placeholder="What needs to be done?" id="add-input">
+    </form>
+    <ul id="todo-list"></ul>
+    <div id="info-row" hidden>
+      <p id="items-left">0 items left</p>
+      <ul id="filter-buttons">
+        <li><button type="button" id="show-all-button" class="selected">All</button></li>
+        <li><button type="button" id="show-active-button">Active</button></li>
+        <li><button type="button" id="show-completed-button">Completed</button></li>
+      </ul>
+      <button type="button" id="clear-completed-button">Clear completed</button>
+    </div>
+  </main>
+  <footer>
+    <p>Written by Jakob Kallin</p>
+    <p>Part of TodoMVC</p>
+  </footer>
+</body>
+</html>

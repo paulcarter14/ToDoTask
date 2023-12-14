@@ -7,6 +7,7 @@ using ToDoWebApiPaulCarter.Data;
 using ToDoWebApiPaulCarter.Models;
 using System.Text.Json;
 using System.Diagnostics.Eventing.Reader;
+using ToDoWebApiPaulCarter.Services;
 
 namespace ToDoWebApiPaulCarter.Controllers
 {
@@ -14,105 +15,108 @@ namespace ToDoWebApiPaulCarter.Controllers
     [Produces("application/json")]
     public class NotesController : ControllerBase
     {
-        private readonly ToDoContext _context;
+        private readonly INotesService _notesService;
 
-        public NotesController(ToDoContext context)
+        public NotesController(INotesService notesService)
         {
-            _context = context;
+            _notesService = notesService;
         }
 
         [HttpGet("notes")]
-        public IEnumerable<Note> Get(bool? completed) //Här kommer antingen null, true eller false
+        public ActionResult<IEnumerable<Note>> Get(bool? completed)
         {
-            var dbNotes = _context.Notes;
-            if (completed == true)
+            try
             {
-                //retunera endast de som är true
-                var activeNotes = dbNotes.Where(n => n.IsDone == true);
-                return activeNotes;
-
+                var notes = _notesService.GetNotes(completed);
+                return Ok(notes);
             }
-            else if (completed == false) 
+            catch (Exception ex)
             {
-                //retunera endast de som är false
-                var completeNotes = dbNotes.Where(n => n.IsDone == false);
-                return completeNotes;
+                return StatusCode(500, "Internal Server Error: " + ex.Message);
             }
-
-            //retunera allt
-            return dbNotes ;
         }
 
         [HttpGet("remaining")]
-        public int GetRemaining()
+        public ActionResult<int> GetRemaining()
         {
-            var dbNotes = _context.Notes.Count(n => !n.IsDone);
-            return dbNotes;
+            try
+            {
+                var count = _notesService.GetRemainingCount();
+                return Ok(count);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal Server Error: " + ex.Message);
+            }
         }
 
         [HttpPost("notes")]
-        public void Post(Note httpNote)
+        public ActionResult Post([FromBody] Note note)
         {
-            var note = httpNote;
-            _context.Notes.Add(note);
-            _context.SaveChanges();
+            try
+            {
+                _notesService.AddNote(note);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal Server Error: " + ex.Message);
+            }
         }
 
         [HttpPut("notes/{id}")]
-        public void Put(int id, Note updatedNote)
+        public ActionResult Put(int id, [FromBody] Note updatedNote)
         {
-            var note = _context.Notes.FirstOrDefault(n => n.ID == id);
-            if (note != null)
+            try
             {
-                note.IsDone = updatedNote.IsDone;
-                _context.SaveChanges();
-
+                _notesService.UpdateNote(id, updatedNote);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal Server Error: " + ex.Message);
             }
         }
 
         [HttpDelete("notes/{id}")]
-        public void Delete(int id)
+        public ActionResult Delete(int id)
         {
-            var note = _context.Notes.FirstOrDefault(n => n.ID == id);
-            if (note != null)
+            try
             {
-                _context.Notes.Remove(note);
-                _context.SaveChanges();
-
+                _notesService.DeleteNote(id);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal Server Error: " + ex.Message);
             }
         }
 
         [HttpPost("toggle-all")]
-        public void ToggleAll()
+        public ActionResult ToggleAll()
         {
-            bool allDone = _context.Notes.All(n => n.IsDone);
-            if (allDone == false)
+            try
             {
-                foreach (var note in _context.Notes)
-                {
-                    note.IsDone = true;
-                }
+                _notesService.ToggleAllNotes();
+                return Ok();
             }
-            else
+            catch (Exception ex)
             {
-                foreach (var note in _context.Notes)
-                {
-                    note.IsDone = false;
-                }
+                return StatusCode(500, "Internal Server Error: " + ex.Message);
             }
-                    _context.SaveChanges();
         }
 
         [HttpPost("clear-completed")]
-        public void ClearCompleted()
+        public ActionResult ClearCompleted()
         {
-
-            var note = _context.Notes.Where(n => n.IsDone == true);
-            foreach (var n in note)
+            try
             {
-                _context.Notes.Remove(n);
-                _context.SaveChanges();
-
+                _notesService.ClearCompletedNotes();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal Server Error: " + ex.Message);
             }
         }
     }

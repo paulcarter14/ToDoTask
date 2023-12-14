@@ -8,6 +8,7 @@ using static Azure.Core.HttpHeader;
 
 namespace ToDoWebApiPaulCarter.Data
 {
+
     public class ToDoContext : DbContext
     {
         public ToDoContext (DbContextOptions<ToDoContext> options)
@@ -15,7 +16,9 @@ namespace ToDoWebApiPaulCarter.Data
         {
         }
 
-        public DbSet<Note> Notes { get; set; }
+        public ToDoContext() { }
+
+        public virtual DbSet<Note> Notes { get; set; }
 
     }
 }

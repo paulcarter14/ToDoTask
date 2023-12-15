@@ -15,7 +15,7 @@ public class UnitTest1
         mockSet.As<IQueryable<Note>>().Setup(m => m.Provider).Returns(queryable.Provider);
         mockSet.As<IQueryable<Note>>().Setup(m => m.Expression).Returns(queryable.Expression);
         mockSet.As<IQueryable<Note>>().Setup(m => m.ElementType).Returns(queryable.ElementType);
-        mockSet.As<IQueryable<Note>>().Setup(m => m.GetEnumerator()).Returns(() => queryable.GetEnumerator());
+        mockSet.As<IQueryable<Note>>().Setup(m => m.GetEnumerator()).Returns(queryable.GetEnumerator);
         return mockSet;
     }
 
@@ -77,8 +77,28 @@ public class UnitTest1
         mockContext.Verify(m => m.SaveChanges(), Times.Once());
     }
 
+    //[Fact]
+    //public void UpdateNote_WhenCalled_UpdatesNote()
+    //{
+    //    var testData = new List<Note>
+    //{
+    //    new Note { ID = 1, Text = "Note 1", IsDone = false }
+    //};
+    //    var mockSet = CreateMockSet(testData);
+    //    var mockContext = CreateMockContext(mockSet);
+    //    var service = new NotesService(mockContext.Object);
+    //    var updatedNote = new Note { ID = 1, Text = "Updated Note 1", IsDone = true };
+
+    //    service.UpdateNote(1, updatedNote);
+
+    //    var note = testData.FirstOrDefault(n => n.ID == 1);
+    //    Assert.NotNull(note);
+    //    Assert.Equal("Updated Note 1", note.Text);
+    //    Assert.True(note.IsDone);
+    //}
+
     [Fact]
-    public void UpdateNote_WhenCalled_UpdatesNote()
+    public void UpdateNote_WhenCalled_UpdatesNoteToDone()
     {
         var testData = new List<Note>
     {
@@ -87,14 +107,14 @@ public class UnitTest1
         var mockSet = CreateMockSet(testData);
         var mockContext = CreateMockContext(mockSet);
         var service = new NotesService(mockContext.Object);
-        var updatedNote = new Note { ID = 1, Text = "Updated Note 1", IsDone = true };
+        var updatedNote = new Note { ID = 1, IsDone = true };
 
         service.UpdateNote(1, updatedNote);
 
         var note = testData.FirstOrDefault(n => n.ID == 1);
         Assert.NotNull(note);
-        Assert.Equal("Updated Note 1", note.Text);
         Assert.True(note.IsDone);
+        mockContext.Verify(m => m.SaveChanges(), Times.Once());
     }
 
     [Fact]

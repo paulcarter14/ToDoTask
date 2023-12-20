@@ -19,10 +19,10 @@ jobs:
         dotnet-version: '7.0'
 
     - name: Install dependencies
-      run: dotnet restore ToDoAPI/YourSolution.sln
+      run: dotnet restore ToDoAPI/ToDoWebAp.sln
 
     - name: Build
-      run: dotnet build ToDoAPI/YourSolution.sln --no-restore
+      run: dotnet build ToDoAPI/ToDoWebAp.sln --no-restore
 
     - name: Test
-      run: dotnet test ToDoAPI/YourSolution.sln --no-restore --verbosity normal
+      run: dotnet test ToDoAPI/ToDoWebAp.sln --no-restore --verbosity normal

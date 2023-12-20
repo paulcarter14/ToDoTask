@@ -16,6 +16,8 @@ public class UnitTest1
         mockSet.As<IQueryable<Note>>().Setup(m => m.Expression).Returns(queryable.Expression);
         mockSet.As<IQueryable<Note>>().Setup(m => m.ElementType).Returns(queryable.ElementType);
         mockSet.As<IQueryable<Note>>().Setup(m => m.GetEnumerator()).Returns(queryable.GetEnumerator);
+        mockSet.Setup(m => m.Remove(It.IsAny<Note>()))
+           .Callback<Note>(note => sourceList.Remove(note));
         return mockSet;
     }
 
@@ -32,8 +34,8 @@ public class UnitTest1
     {
         var testData = new List<Note>
         {
-            new Note { ID = 1, Text = "Note 1", IsDone = false },
-            new Note { ID = 2, Text = "Note 2", IsDone = true }
+            new Note { ID = 1, Title = "Title 1", Description = "Description 1", IsDone = false },
+            new Note { ID = 2, Title = "Title 2", Description = "Description 2", IsDone = true }
         };
         var mockSet = CreateMockSet(testData);
         var mockContext = CreateMockContext(mockSet);
@@ -50,10 +52,10 @@ public class UnitTest1
     public void GetRemainingCount_WhenCalled_ReturnsCountOfUncompletedNotes()
     {
         var testData = new List<Note>
-    {
-        new Note { ID = 1, Text = "Note 1", IsDone = false },
-        new Note { ID = 2, Text = "Note 2", IsDone = true }
-    };
+        {
+            new Note { ID = 1, Title = "Title 1", Description = "Description 1", IsDone = false },
+            new Note { ID = 2, Title = "Title 2", Description = "Description 2", IsDone = true }
+        };
         var mockSet = CreateMockSet(testData);
         var mockContext = CreateMockContext(mockSet);
         var service = new NotesService(mockContext.Object);
@@ -73,7 +75,7 @@ public class UnitTest1
 
         var mockContext = CreateMockContext(mockSet);
         var service = new NotesService(mockContext.Object);
-        var noteToAdd = new Note { Text = "new note", IsDone = false };
+        var noteToAdd = new Note { Title = "New Title", Description = "New Description", IsDone = false };
 
         service.AddNote(noteToAdd);
 
@@ -88,12 +90,13 @@ public class UnitTest1
     {
         var testData = new List<Note>
     {
-        new Note { ID = 1, Text = "Note 1", IsDone = false }
+        new Note { ID = 1, Title = "Title 2", Description = "Description 2", IsDone = false }
     };
         var mockSet = CreateMockSet(testData);
         var mockContext = CreateMockContext(mockSet);
         var service = new NotesService(mockContext.Object);
-        var updatedNote = new Note { ID = 1, IsDone = true };
+        var updatedNote = new Note { ID = 1, Title = "Updated Title", Description = "Updated Description", IsDone = true };
+
 
         service.UpdateNote(1, updatedNote);
 
@@ -107,18 +110,16 @@ public class UnitTest1
     public void DeleteNote_WhenCalled_DeletesNote()
     {
         var testNotes = new List<Note>
-            {
-                new Note { ID = 1, Text = "Test Note 1", IsDone = false },
-                new Note { ID = 2, Text = "Test Note 2", IsDone = true }
-            };
-
+    {
+        new Note { ID = 1, Title = "Title 1", Description = "Description 1", IsDone = false },
+        new Note { ID = 2, Title = "Title 2", Description = "Description 2", IsDone = true }
+    };
         var mockSet = CreateMockSet(testNotes);
         var mockContext = CreateMockContext(mockSet);
         var service = new NotesService(mockContext.Object);
-
         service.DeleteNote(1);
 
-        mockSet.Verify(m => m.Remove(It.Is<Note>(n => n.ID == 1)), Times.Once());
+        Assert.DoesNotContain(testNotes, n => n.ID == 1);
         mockContext.Verify(m => m.SaveChanges(), Times.Once());
     }
 }

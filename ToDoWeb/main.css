@@ -48,7 +48,7 @@ main {
     align-self: center;
 }
 
-#add-input {
+#add-input, #add-title, #add-description {
     flex: 1;
     font-size: 24px;
     padding-left: 5px;
@@ -60,7 +60,7 @@ main {
     min-width: 0;
 }
 
-#add-input:focus {
+#add-input:focus, #add-title:focus, #add-description:focus {
     outline: 0;
 }
 
@@ -72,27 +72,27 @@ main {
 .note-container {
     display: flex;
     flex-direction: row;
-    padding-left: 10px;
-    padding-right: 20px;
-    padding-top: 15px;
-    padding-bottom: 15px;
+    justify-content: space-between;
     align-items: center;
+    padding: 15px 20px;
     border-bottom: 1px solid #ededed;
     color: #4d4d4d;
 }
 
 .note-checkbox {
+    align-self: center;
     margin-right: 10px;
     width: 24px;
     height: 24px;
 }
 
-.note-text {
-    flex: 1;
+.note-title, .note-description, .note-text {
     font-size: 24px;
     color: #4d4d4d;
 }
 
+.note-container.checked .note-title,
+.note-container.checked .note-description,
 .note-container.checked .note-text {
     color: #d9d9d9;
     text-decoration: line-through;
@@ -101,6 +101,7 @@ main {
 .delete-button {
     border: 0;
     background-color: transparent;
+    align-self: center;
 }
 
 #info-row {

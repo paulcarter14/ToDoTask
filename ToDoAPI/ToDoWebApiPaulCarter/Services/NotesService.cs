@@ -41,6 +41,8 @@ public class NotesService : INotesService
         if (note != null)
         {
             note.IsDone = updatedNote.IsDone;
+            note.Title = updatedNote.Title;
+            note.Description = updatedNote.Description;
             _context.SaveChanges();
         }
     }

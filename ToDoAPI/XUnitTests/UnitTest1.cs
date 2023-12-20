@@ -31,7 +31,8 @@ public class UnitTest1
 
     [Fact]
     public void GetNotes_WhenCalled_ReturnsAllNotes()
-    {
+    {        
+        // Arrange
         var testData = new List<Note>
         {
             new Note { ID = 1, Title = "Title 1", Description = "Description 1", IsDone = false },
@@ -41,8 +42,10 @@ public class UnitTest1
         var mockContext = CreateMockContext(mockSet);
         var service = new NotesService(mockContext.Object);
 
+        // Act
         var notes = service.GetNotes(null).ToList();
 
+        // Assert
         Assert.Equal(2, notes.Count);
         Assert.Contains(testData[0], notes);
         Assert.Contains(testData[1], notes);
@@ -51,6 +54,7 @@ public class UnitTest1
     [Fact]
     public void GetRemainingCount_WhenCalled_ReturnsCountOfUncompletedNotes()
     {
+        // Arrange
         var testData = new List<Note>
         {
             new Note { ID = 1, Title = "Title 1", Description = "Description 1", IsDone = false },
@@ -60,14 +64,17 @@ public class UnitTest1
         var mockContext = CreateMockContext(mockSet);
         var service = new NotesService(mockContext.Object);
 
+        // Act
         var count = service.GetRemainingCount();
 
+        // Assert
         Assert.Equal(1, count);
     }
 
     [Fact]
     public void AddNote_WhenCalled_AddsNote()
     {
+        // Arrange
         var notes = new List<Note>();
         var mockSet = new Mock<DbSet<Note>>();
         mockSet.Setup(m => m.Add(It.IsAny<Note>()))
@@ -76,18 +83,19 @@ public class UnitTest1
         var mockContext = CreateMockContext(mockSet);
         var service = new NotesService(mockContext.Object);
         var noteToAdd = new Note { Title = "New Title", Description = "New Description", IsDone = false };
-
+        // Act
         service.AddNote(noteToAdd);
 
+        // Assert
         Assert.Single(notes);
         Assert.Contains(noteToAdd, notes);
-
         mockContext.Verify(m => m.SaveChanges(), Times.Exactly(1));
     }
 
     [Fact]
     public void UpdateNote_WhenCalled_UpdatesNoteToDone()
     {
+        // Arrange
         var testData = new List<Note>
     {
         new Note { ID = 1, Title = "Title 2", Description = "Description 2", IsDone = false }
@@ -97,10 +105,11 @@ public class UnitTest1
         var service = new NotesService(mockContext.Object);
         var updatedNote = new Note { ID = 1, Title = "Updated Title", Description = "Updated Description", IsDone = true };
 
-
+        // Act
         service.UpdateNote(1, updatedNote);
 
         var note = testData.FirstOrDefault(n => n.ID == 1);
+        // Assert
         Assert.NotNull(note);
         Assert.True(note.IsDone);
         mockContext.Verify(m => m.SaveChanges(), Times.Once());
@@ -109,6 +118,7 @@ public class UnitTest1
     [Fact]
     public void DeleteNote_WhenCalled_DeletesNote()
     {
+        // Arrange
         var testNotes = new List<Note>
     {
         new Note { ID = 1, Title = "Title 1", Description = "Description 1", IsDone = false },
@@ -117,8 +127,11 @@ public class UnitTest1
         var mockSet = CreateMockSet(testNotes);
         var mockContext = CreateMockContext(mockSet);
         var service = new NotesService(mockContext.Object);
+
+        // Act
         service.DeleteNote(1);
 
+        // Assert
         Assert.DoesNotContain(testNotes, n => n.ID == 1);
         mockContext.Verify(m => m.SaveChanges(), Times.Once());
     }

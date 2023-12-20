@@ -66,36 +66,22 @@ public class UnitTest1
     [Fact]
     public void AddNote_WhenCalled_AddsNote()
     {
+        var notes = new List<Note>();
         var mockSet = new Mock<DbSet<Note>>();
+        mockSet.Setup(m => m.Add(It.IsAny<Note>()))
+               .Callback<Note>(note => notes.Add(note));
+
         var mockContext = CreateMockContext(mockSet);
         var service = new NotesService(mockContext.Object);
-        var noteToAdd = new Note { Text = "New Note", IsDone = false };
+        var noteToAdd = new Note { Text = "new note", IsDone = false };
 
         service.AddNote(noteToAdd);
 
-        mockSet.Verify(s => s.Add(It.IsAny<Note>()), Times.Once());
-        mockContext.Verify(m => m.SaveChanges(), Times.Once());
+        Assert.Single(notes);
+        Assert.Contains(noteToAdd, notes);
+
+        mockContext.Verify(m => m.SaveChanges(), Times.Exactly(1));
     }
-
-    //[Fact]
-    //public void UpdateNote_WhenCalled_UpdatesNote()
-    //{
-    //    var testData = new List<Note>
-    //{
-    //    new Note { ID = 1, Text = "Note 1", IsDone = false }
-    //};
-    //    var mockSet = CreateMockSet(testData);
-    //    var mockContext = CreateMockContext(mockSet);
-    //    var service = new NotesService(mockContext.Object);
-    //    var updatedNote = new Note { ID = 1, Text = "Updated Note 1", IsDone = true };
-
-    //    service.UpdateNote(1, updatedNote);
-
-    //    var note = testData.FirstOrDefault(n => n.ID == 1);
-    //    Assert.NotNull(note);
-    //    Assert.Equal("Updated Note 1", note.Text);
-    //    Assert.True(note.IsDone);
-    //}
 
     [Fact]
     public void UpdateNote_WhenCalled_UpdatesNoteToDone()

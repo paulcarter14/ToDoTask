@@ -5,6 +5,10 @@ VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToDoWebApiPaulCarter", "ToDoWebApiPaulCarter\ToDoWebApiPaulCarter.csproj", "{E3439395-EA68-4F94-ADFF-CBA542243F9D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{782564EC-EC92-4183-A2DF-8F60F63EDA5F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XUnitTests", "XUnitTests\XUnitTests.csproj", "{54F19FD0-CEFD-4ED2-BEEB-469BBF68C499}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,9 +19,16 @@ Global
 		{E3439395-EA68-4F94-ADFF-CBA542243F9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E3439395-EA68-4F94-ADFF-CBA542243F9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E3439395-EA68-4F94-ADFF-CBA542243F9D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54F19FD0-CEFD-4ED2-BEEB-469BBF68C499}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54F19FD0-CEFD-4ED2-BEEB-469BBF68C499}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54F19FD0-CEFD-4ED2-BEEB-469BBF68C499}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54F19FD0-CEFD-4ED2-BEEB-469BBF68C499}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{54F19FD0-CEFD-4ED2-BEEB-469BBF68C499} = {782564EC-EC92-4183-A2DF-8F60F63EDA5F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5C75D207-C0DA-473B-9A7C-A297BF86C9C3}

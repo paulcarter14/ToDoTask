@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using ToDoWebApiPaulCarter.Data;
+using ToDoWebApiPaulCarter.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ToDoContext>(options => 
     options.UseSqlServer(builder.Configuration.GetConnectionString("ToDoContext")
         ?? throw new InvalidOperationException("Connection string 'ToDoAssignmentPaulContext' not found."))); ;
+builder.Services.AddScoped<INotesService, NotesService>();
 
 var app = builder.Build();
 

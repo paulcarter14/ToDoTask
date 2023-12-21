@@ -31,6 +31,10 @@ public class NotesService : INotesService
 
     public void AddNote(Note note)
     {
+        if (note == null)
+        {
+            throw new ArgumentNullException(nameof(note), "Value cannot be null.");
+        }
         _context.Notes.Add(note);
         _context.SaveChanges();
     }

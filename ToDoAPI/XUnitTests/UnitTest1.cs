@@ -135,4 +135,17 @@ public class UnitTest1
         Assert.DoesNotContain(testNotes, n => n.ID == 1);
         mockContext.Verify(m => m.SaveChanges(), Times.Once());
     }
+
+    [Fact]
+    public void AddNote_NullNote_ThrowsArgumentNullException()
+    {
+        // Arrange
+        var mockSet = new Mock<DbSet<Note>>();
+        var mockContext = CreateMockContext(mockSet);
+        var service = new NotesService(mockContext.Object);
+
+        // Act & Assert
+        var exception = Assert.Throws<ArgumentNullException>(() => service.AddNote(null));
+        Assert.Equal("Value cannot be null. (Parameter 'note')", exception.Message);
+    }
 }
